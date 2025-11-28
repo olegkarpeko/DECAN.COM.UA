@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <title>Мої замовлення — Dekan Casino</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Шрифт + той самий казино-стиль, що й на головній -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'main/css/casino.css' %}">
+</head>
+<body>
+
+    <!-- Зелений фон казино -->
+    <div id="casino-overlay"></div>
+
+    <!-- HEADER такий самий як на головній -->
+    <header class="header">
+        <div class="container header__content">
+            <a class="logo" href="{% url 'home' %}">
+                Dekan <span class="logo__highlight">Com</span>.ua
+            </a>
+
+            <nav class="nav">
+                <a href="{% url 'home' %}#services">Services</a>
+                <a href="{% url 'home' %}#process">How it works</a>
+                <a href="{% url 'home' %}#pricing">Pricing</a>
+
+                <a href="{% url 'casino' %}" class="btn btn--ghost">
+                    Casino Slots
+                </a>
+
+                {% if user.is_authenticated %}
+                    <span class="nav__user">
+                        Hello, {{ user.username }}
+                    </span>
+                    <a href="{% url 'logout' %}" class="btn btn--outline">
+                        Logout
+                    </a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="btn btn--ghost">
+                        Login
+                    </a>
+                    <a href="{% url 'register' %}" class="btn btn--primary">
+                        Register
+                    </a>
+                {% endif %}
+            </nav>
+        </div>
+    </header>
+
+    <!-- ГОЛОВНИЙ БЛОК: МОЇ ЗАМОВЛЕННЯ -->
+    <main class="section" id="orders">
+        <div class="container">
+
+            <h1 class="section__title">
+                MY ORDERS
+            </h1>
+
+            {% if user.is_authenticated %}
+                <p style="text-align:center; color:#e5e7eb; margin-bottom:24px; font-size:14px;">
+                    Замовлення, прив’язані до акаунта:
+                    <strong>{{ user.username }}</strong>
+                </p>
+            {% else %}
+                <p style="text-align:center; color:#e5e7eb; margin-bottom:24px; font-size:14px;">
+                    Ви не авторизовані. <a href="{% url 'login' %}" style="color:#facc15;">Увійти</a>
+                </p>
+            {% endif %}
+
+            {% if clients %}
+                <!-- Сітка карточок замовлень -->
+                <div class="cards">
+                    {% for el in clients %}
+                        <article class="card">
+                            <h3 class="card__title">
+                                {{ el.posluga|capfirst }}
+                            </h3>
+
+                            <p class="card__text">
+                                <strong>Клієнт:</strong> {{ el.name }}<br>
+                                {% if el.email %}
+                                    <strong>Email:</strong> {{ el.email }}<br>
+                                {% endif %}
+                                {% if el.phone %}
+                                    <strong>Контакт:</strong> {{ el.phone }}<br>
+                                {% endif %}
+                            </p>
+
+                            <p class="card__text">
+                                <strong>Ціна:</strong>
+                                {% if el.price %}
+                                    {{ el.price }} грн
+                                {% else %}
+                                    за домовленістю
+                                {% endif %}
+                            </p>
+
+                            {% if el.posluga == "перездача" %}
+                                <span class="status-chip status-chip--loss">
+                                    Перездача
+                                </span>
+                            {% elif el.posluga == "закрити рік" %}
+                                <span class="status-chip status-chip--win">
+                                    Декан закрив рік
+                                </span>
+                            {% elif el.posluga == "закрити семестр" %}
+                                <span class="status-chip status-chip--sem">
+                                    Закрито семестр
+                                </span>
+                            {% elif el.posluga == "закрити предмет" %}
+                                <span class="status-chip status-chip--subject">
+                                    Закрито предмет
+                                </span>
+                            {% else %}
+                                <span class="status-chip">
+                                    Інше
+                                </span>
+                            {% endif %}
+                        </article>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p style="text-align:center; color:#9ca3af; margin-top:20px;">
+                    Поки що немає жодного замовлення. <br>
+                    <a href="{% url 'home' %}" style="color:#facc15; text-decoration:none;">
+                        Перейти на головну і зробити перше замовлення →
+                    </a>
+                </p>
+            {% endif %}
+        </div>
+    </main>
+
+    <!-- FOOTER як на головній -->
+    <footer class="footer" id="contact">
+        <div class="container footer__content">
+            <div>
+                <strong>DekanCom.ua</strong>
+                <p class="small-text">Неформальна підтримка студентів. Без зайвих питань.</p>
+            </div>
+
+            <div class="footer__links">
+                <a href="{% url 'home' %}#home">Home</a>
+                <a href="{% url 'home' %}#services">Services</a>
+                <a href="{% url 'home' %}#pricing">Pricing</a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

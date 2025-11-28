@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="uk">
+<head>
+    {% load static %}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Login — Dekan Casino</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'main/css/casino.css' %}">
+</head>
+<body>
+<div id="casino-overlay"></div>
+
+<header class="header">
+    <div class="header__content container">
+        <a class="logo" href="{% url 'home' %}">Dekan <span class="logo__highlight">Casino</span>.ua</a>
+
+        <nav class="nav">
+            <a href="{% url 'home' %}#services">Services</a>
+            <a href="{% url 'home' %}#process">How it works</a>
+            <a href="{% url 'home' %}#pricing">Pricing</a>
+            <a href="{% url 'home' %}#contact">Contact</a>
+        </nav>
+
+        <div class="header__auth">
+            <a href="{% url 'register' %}" class="btn btn--outline btn--small">Sign up</a>
+        </div>
+    </div>
+</header>
+
+<main class="hero">
+    <div class="container hero__columns">
+
+        <div class="hero__text">
+            <h1 class="hero__title">
+                Login to <span class="hero__accent">Dekan Casino</span>
+            </h1>
+            <p class="hero__description">
+                Ввійди в акаунт, щоб бачити свої замовлення, перездачі та “виграші” у базі clients_db.
+            </p>
+        </div>
+
+        <div class="hero__form-block" id="orderPanel">
+            <form method="post" autocomplete="off">
+                {% csrf_token %}
+                <div class="form-header">
+                    <span class="form-header__label">Login</span>
+                    <span class="form-header__badge">Access granted</span>
+                </div>
+
+                {% if messages %}
+                    <ul style="margin-bottom:10px; color:#fecaca; font-size:13px; list-style:none;">
+                        {% for m in messages %}
+                            <li>{{ m }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+
+                <label class="field">
+                    <span class="field__label">Username</span>
+                    <input class="field__input" type="text" name="username" required>
+                </label>
+
+                <label class="field">
+                    <span class="field__label">Password</span>
+                    <input class="field__input" type="password" name="password" required>
+                </label>
+
+                <button type="submit" class="btn btn--primary btn--large">
+                    Login
+                </button>
+
+                <p class="small-text" style="margin-top:10px;">
+                    Ще немає акаунта? <a href="{% url 'register' %}" style="color:#facc15;">Register</a>
+                </p>
+            </form>
+        </div>
+
+    </div>
+</main>
+
+<script src="{% static 'main/js/casino.js' %}"></script>
+</body>
+</html>

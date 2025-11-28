@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="uk">
+<head>
+    {% load static %}
+    <meta charset="utf-8">
+    <title>Register — Dekan Casino</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'main/css/register.css' %}">
+</head>
+<body class="auth-page">
+
+<!-- HEADER як на головній -->
+<header class="header">
+    <div class="header__content container">
+        <a class="logo" href="{% url 'home' %}">
+            DEKAN <span class="logo__highlight">COM</span>.UA
+        </a>
+
+        <nav class="nav">
+            <a href="{% url 'home' %}#services">SERVICES</a>
+            <a href="{% url 'home' %}#process">HOW IT WORKS</a>
+            <a href="{% url 'home' %}#pricing">PRICING</a>
+            <a href="{% url 'clients_db' %}">CLIENT DB</a>
+
+            <a href="{% url 'casino' %}" class="btn btn--primary">CASINO SLOTS</a>
+            <a href="{% url 'login' %}" class="btn btn--outline">LOGIN</a>
+            <a href="{% url 'register' %}" class="btn btn--primary">REGISTER</a>
+        </nav>
+    </div>
+</header>
+
+<!-- HERO як на головній, тільки текст під реєстрацію -->
+<section class="hero">
+    <div class="container hero__columns">
+
+        <!-- Ліва частина: текст -->
+        <div class="hero__text">
+            <h1 class="hero__title">
+                Створи акаунт як
+                <span class="hero__accent">король казино.</span>
+            </h1>
+
+            <p class="hero__description">
+                Після реєстрації ти зможеш швидше оформляти замовлення,
+                бачити історію «перездач», замовлень і спінів слота
+                «Декан закриває рік».
+            </p>
+
+            <div class="hero__actions">
+                <a href="{% url 'home' %}" class="hero__link">
+                    ← Повернутися на головну
+                </a>
+                <a href="{% url 'casino' %}" class="hero__link">
+                    Слот «Декан закриває рік»
+                </a>
+            </div>
+        </div>
+
+        <!-- Права частина: форма реєстрації в стилі QUICK ORDER -->
+        <div class="hero__form-block auth-form">
+            <div class="form-header">
+                <div class="form-header__label">РЕЄСТРАЦІЯ</div>
+                <div class="form-header__badge">FREE ACCESS</div>
+            </div>
+
+            <form method="post" action="{% url 'register' %}" autocomplete="off">
+                {% csrf_token %}
+
+                {% if messages %}
+                    <ul class="auth-messages">
+                        {% for m in messages %}
+                            <li>{{ m }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+
+                <label class="field">
+                    <span class="field__label">USERNAME</span>
+                    <input class="field__input" type="text" name="username" required>
+                </label>
+
+                <label class="field">
+                    <span class="field__label">EMAIL</span>
+                    <input class="field__input" type="email" name="email" required>
+                </label>
+
+                <label class="field">
+                    <span class="field__label">PASSWORD</span>
+                    <input class="field__input" type="password" name="password1" required>
+                </label>
+
+                <label class="field">
+                    <span class="field__label">REPEAT PASSWORD</span>
+                    <input class="field__input" type="password" name="password2" required>
+                </label>
+
+                <button type="submit" class="btn btn--primary btn--large">
+                    СТВОРИТИ АККАУНТ
+                </button>
+
+                <p class="small-text" style="margin-top:10px;">
+                    Уже є акаунт? <a href="{% url 'login' %}" style="color:#facc15;">Увійти</a>
+                </p>
+            </form>
+        </div>
+
+    </div>
+</section>
+
+<script src="{% static 'main/js/auth.js' %}"></script>
+</body>
+</html>

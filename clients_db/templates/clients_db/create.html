@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="uk">
+<head>
+    {% load static %}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>DekanCom — Casino Style Education</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Стиль у стилі казино -->
+    <link rel="stylesheet" href="{% static 'main/css/casino.css' %}">
+</head>
+<body>
+
+    <!-- Фон столу / фішок -->
+    <div id="casino-overlay"></div>
+
+    <!-- HEADER -->
+    <header class="header">
+        <div class="header__content container">
+            <a class="logo" href="#top">Dekan <span class="logo__highlight">Casino</span>.ua</a>
+
+            <nav class="nav">
+                <a href="#services">Services</a>
+                <a href="#process">How it works</a>
+                <a href="#pricing">Pricing</a>
+                <a href="#contact">Contact</a>
+                <!-- Кнопка в хедері, яка теж веде в слот-казино -->
+                <a href="{% url 'casino' %}" class="btn btn--outline btn--small">🎰 Casino</a>
+            </nav>
+
+            <!-- Блок авторизації -->
+            <div class="header__auth">
+                {% if user.is_authenticated %}
+                    <span class="header__user">Hi, {{ user.username }}</span>
+                    <a href="{% url 'logout' %}" class="btn btn--outline btn--small">Logout</a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="btn btn--outline btn--small">Login</a>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO -->
+    <main id="top">
+        <section class="hero">
+            <div class="container hero__columns">
+
+                <!-- Ліва колонка -->
+                <div class="hero__text">
+                    <h1 class="hero__title">
+                        Fast. Confidential. <span class="hero__accent">Like a lucky spin.</span>
+                    </h1>
+
+                    <p class="hero__description">
+                        Order lab works, coursework, tests and session closures.
+                        We take the risk – you take the win.
+                    </p>
+
+                    <!-- Дві основні кнопки: замовлення + слот -->
+                    <div class="hero__cta-row">
+                        <a href="#services" class="btn btn--primary">Order Now</a>
+
+                        <!-- УНІКАЛЬНА КНОПКА В СТИЛІ КАЗИНО -->
+                        <a href="{% url 'casino' %}" class="btn btn--casino">
+                            <span class="btn__glow"></span>
+                            <span class="btn__content">
+                                🎰 Spin Slot
+                                <span class="btn__sub">Secret Dekan mode</span>
+                            </span>
+                        </a>
+                    </div>
+
+                    <!-- Додаткові текстові лінки -->
+                    <div class="hero__links-row">
+                        <a href="#process" class="hero__link">How It Works →</a>
+                        <a href="{% url 'clients_db' %}" class="hero__link">Client DB →</a>
+                    </div>
+                </div>
+
+                <!-- Права колонка – форма -->
+                <div class="hero__form-block" id="orderPanel">
+                    <form id="orderForm" autocomplete="off">
+                        <div class="form-header">
+                            <span class="form-header__label">Quick Order</span>
+                            <span class="form-header__badge">Safe Bet</span>
+                        </div>
+
+                        <label class="field">
+                            <span class="field__label">Work Type</span>
+                            <select class="field__input" name="work_type">
+                                <option>Lab Work</option>
+                                <option>Coursework</option>
+                                <option>Session Closure</option>
+                                <option>Test</option>
+                            </select>
+                        </label>
+
+                        <label class="field">
+                            <span class="field__label">Deadline (days)</span>
+                            <input class="field__input" type="number" name="deadline" min="1" value="3">
+                        </label>
+
+                        <label class="field">
+                            <span class="field__label">Contact (Phone or Email)</span>
+                            <input class="field__input" type="text" name="contact" placeholder="+380... or email@example.com">
+                        </label>
+
+                        <button type="submit" class="btn btn--primary btn--large">
+                            Place Bet (Order)
+                        </button>
+
+                        <p class="small-text">
+                            Guaranteed result or money back. No gambling – only education.
+                        </p>
+                    </form>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SERVICES -->
+        <section class="section" id="services">
+            <div class="container">
+                <h2 class="section__title">Table of Services</h2>
+
+                <div class="cards">
+                    <article class="card">
+                        <h3 class="card__title">Lab Works</h3>
+                        <p class="card__text">
+                            We play the long game: theory, code, report – all in one.
+                        </p>
+                        <a class="btn btn--ghost" href="#contact">Learn More</a>
+                    </article>
+
+                    <article class="card">
+                        <h3 class="card__title">Coursework</h3>
+                        <p class="card__text">
+                            Full combo: structure, sources, slides and defense hints.
+                        </p>
+                        <a class="btn btn--ghost" href="#contact">Learn More</a>
+                    </article>
+
+                    <article class="card">
+                        <h3 class="card__title">Session Closure</h3>
+                        <p class="card__text">
+                            Turn a bad session into a jackpot of closed debts.
+                        </p>
+                        <a class="btn btn--ghost" href="#contact">Learn More</a>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- PROCESS -->
+        <section class="section section--dark" id="process">
+            <div class="container">
+                <h2 class="section__title">How the Game Works</h2>
+
+                <ol class="process">
+                    <li class="process__step">
+                        <span class="chip-label">1</span> Send your task → <strong>We estimate the odds</strong>
+                    </li>
+                    <li class="process__step">
+                        <span class="chip-label">2</span> We pick an author → <strong>You approve the bet</strong>
+                    </li>
+                    <li class="process__step">
+                        <span class="chip-label">3</span> Work in progress → <strong>You see the cards</strong>
+                    </li>
+                    <li class="process__step">
+                        <span class="chip-label">4</span> Delivery → <strong>You collect the win</strong>
+                    </li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- PRICING -->
+        <section class="section" id="pricing">
+            <div class="container">
+                <h2 class="section__title">Table Limits</h2>
+
+                <div class="pricing-table">
+                    <div class="pricing-row pricing-row--header">
+                        <div>Service</div>
+                        <div>Deadline</div>
+                        <div>From</div>
+                    </div>
+
+                    <div class="pricing-row pricing-row--highlight">
+                        <div>Lab Work</div>
+                        <div>1–3 days</div>
+                        <div>250 UAH</div>
+                    </div>
+
+                    <div class="pricing-row">
+                        <div>Coursework</div>
+                        <div>7–14 days</div>
+                        <div>1500 UAH</div>
+                    </div>
+
+                    <div class="pricing-row">
+                        <div>Session Closure</div>
+                        <div>1–5 days</div>
+                        <div>500+ UAH</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer" id="contact">
+        <div class="container footer__content">
+            <div>
+                <strong>Dekan Casino.ua</strong>
+                <p class="small-text">Email: info@dekan.com.ua · Phone: +380 00 000 0000</p>
+            </div>
+
+            <div class="footer__links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JS -->
+    <script src="{% static 'main/js/casino.js' %}"></script>
+</body>
+</html>

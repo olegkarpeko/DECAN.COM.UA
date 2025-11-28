@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="uk">
+<head>
+    {% load static %}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>DekanCom — Casino Style</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'main/css/casino.css' %}">
+</head>
+<body>
+
+    <!-- Зелений казино-фон -->
+    <div id="casino-overlay"></div>
+
+    <!-- HEADER -->
+    <header class="header">
+        <div class="container header__content">
+            <a class="logo" href="/">
+                Dekan <span class="logo__highlight">Com</span>.ua
+            </a>
+
+            <nav class="nav">
+                <a href="#services">Services</a>
+                <a href="#process">How it works</a>
+                <a href="#pricing">Pricing</a>
+
+                <a href="{% url 'clients_db' %}" class="btn btn--ghost">
+                    Client DB
+                </a>
+
+                <a href="{% url 'casino' %}" class="btn btn--primary">
+                    Casino Slots
+                </a>
+
+                {% if user.is_authenticated %}
+                    <span class="nav__user">
+                        Hello, {{ user.username }}
+                    </span>
+                    <a href="{% url 'logout' %}" class="btn btn--outline">
+                        Logout
+                    </a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="btn btn--ghost">
+                        Login
+                    </a>
+                    <a href="{% url 'register' %}" class="btn btn--primary">
+                        Register
+                    </a>
+                {% endif %}
+            </nav>
+        </div>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero" id="home">
+        <div class="container hero__columns">
+
+            <!-- Ліва частина: текст + кнопки -->
+            <div class="hero__text">
+                <h1 class="hero__title">
+                    Закрий семестр як король <span class="hero__accent">казино</span>.
+                </h1>
+                <p class="hero__description">
+                    Лаби, курсові, сесія, перездачі — ми все акуратно оформимо, пояснимо
+                    і підготуємо до захисту. Ти просто оформлюєш замовлення —
+                    і граєш далі.
+                </p>
+
+                <div class="hero__actions">
+                    <!-- Кнопка скролу до форми -->
+                    <button class="btn btn--primary" type="button" data-scroll="#order-card">
+                        Замовити роботу
+                    </button>
+
+                    <!-- Перехід у казино-слоти -->
+                    <a href="{% url 'casino' %}" class="btn btn--outline">
+                        Слот «Декан закриває рік»
+                    </a>
+
+                    {% if not user.is_authenticated %}
+                        <a href="{% url 'register' %}" class="hero__link">
+                            Зареєструватися →
+                        </a>
+                    {% else %}
+                        <a href="{% url 'clients_db' %}" class="hero__link">
+                            Мої замовлення →
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Права частина: форма швидкого замовлення -->
+            <div class="hero__form-block" id="order-card">  <!-- ТУТ Я ПОМІНЯВ id -->
+                <form class="order-form" id="orderForm" method="post" autocomplete="off">
+                    {% csrf_token %}
+                    <h3 class="order-form__title">Quick Order</h3>
+
+                    <label class="field">
+                      <span class="field__label">Work Type</span>
+                      <select class="field__input" name="work_type">
+                        <option>Lab Work</option>
+                        <option>Coursework</option>
+                        <option>Session Closure</option>
+                        <option>Test</option>
+                      </select>
+                    </label>
+
+                    <label class="field">
+                      <span class="field__label">Deadline (days)</span>
+                      <input class="field__input" type="number" name="deadline" min="1" value="3">
+                    </label>
+
+                    <label class="field">
+                      <span class="field__label">Contact (Phone or Email)</span>
+                      <input class="field__input" type="text" name="contact" placeholder="+380... or email@example.com">
+                    </label>
+
+                    <button type="submit" class="btn btn--primary btn--large">
+                      Get Offer
+                    </button>
+
+                    {% if messages %}
+                      <div class="order-messages">
+                        {% for m in messages %}
+                          <p class="order-message">{{ m }}</p>
+                        {% endfor %}
+                      </div>
+                    {% endif %}
+
+                    <p class="small-text">
+                      Money-back guarantee if the quality is not satisfactory.
+                    </p>
+                </form>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- SERVICES -->
+    <section class="section" id="services">
+        <div class="container">
+            <h2 class="section__title">
+                OUR SERVICES
+            </h2>
+
+            <div class="cards">
+                <article class="card">
+                    <h3 class="card__title">Лабораторні роботи</h3>
+                    <p class="card__text">
+                        Повний пакет: теорія, код, оформлення по вимогам кафедри.
+                        Пояснення для захисту, скріни, формули.
+                    </p>
+                    <button class="btn btn--outline"
+  type="button"
+  data-scroll="#order-card"
+  data-work="Lab Work">
+                        Замовити лабу
+                    </button>
+                </article>
+
+                <article class="card">
+                    <h3 class="card__title">Курсові роботи</h3>
+                    <p class="card__text">
+                        Структура, зміст, література, презентація. Готуємо так,
+                        щоб не було страшно йти до викладача.
+                    </p>
+                    <button
+  class="btn btn--outline"
+  type="button"
+  data-scroll="#order-card"
+  data-work="Coursework">
+  Замовити курсову
+</button>
+
+                </article>
+
+                <article class="card">
+                    <h3 class="card__title">Закриття сесії</h3>
+                    <p class="card__text">
+                        Допомога з «хвостами», перездачами, контрольними.
+                        Все робиться акуратно і без цирку.
+                    </p>
+                    <button
+  class="btn btn--outline"
+  type="button"
+  data-scroll="#order-card"
+  data-work="Session Closure">
+  Домовитись про сесію
+</button>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROCESS -->
+    <section class="section section--dark" id="process">
+        <div class="container">
+            <h2 class="section__title">
+                HOW IT WORKS
+            </h2>
+
+            <ol class="process">
+                <li class="process__step">
+                    <span class="chip-label">1</span>
+                    <span>Ти надсилаєш завдання → <strong>ми оцінюємо обсяг і дедлайн</strong>.</span>
+                </li>
+                <li class="process__step">
+                    <span class="chip-label">2</span>
+                    <span>Підбираємо виконавця → <strong>узгоджуємо ціну та терміни</strong>.</span>
+                </li>
+                <li class="process__step">
+                    <span class="chip-label">3</span>
+                    <span>Виконуємо роботу → <strong>надсилаємо тобі чернетки / частини</strong>.</span>
+                </li>
+                <li class="process__step">
+                    <span class="chip-label">4</span>
+                    <span>Фінальна версія → <strong>допомога з підготовкою до захисту</strong>.</span>
+                </li>
+            </ol>
+        </div>
+    </section>
+
+    <!-- PRICING -->
+    <section class="section" id="pricing">
+        <div class="container">
+            <h2 class="section__title">
+                PRICING
+            </h2>
+
+            <div class="pricing-table">
+                <div class="pricing-row pricing-row--header">
+                    <div>Тип</div>
+                    <div>Термін</div>
+                    <div>Від</div>
+                </div>
+
+                <div class="pricing-row pricing-row--highlight">
+                    <div>Лабораторна робота</div>
+                    <div>1–3 дні</div>
+                    <div>від 250 грн</div>
+                </div>
+
+                <div class="pricing-row">
+                    <div>Курсова робота</div>
+                    <div>7–14 днів</div>
+                    <div>від 1500 грн</div>
+                </div>
+
+                <div class="pricing-row">
+                    <div>Закриття сесії</div>
+                    <div>1–5 днів</div>
+                    <div>від 500 грн</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer" id="contact">
+        <div class="container footer__content">
+            <div>
+                <strong>DekanCom.ua</strong>
+                <p class="small-text">Неформальна підтримка студентів. Без зайвих питань.</p>
+            </div>
+
+            <div class="footer__links">
+                <a href="#home">Up</a>
+                <a href="#services">Services</a>
+                <a href="#pricing">Pricing</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JS -->
+    <script src="{% static 'main/js/casino.js' %}"></script>
+</body>
+</html>

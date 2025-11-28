@@ -1,0 +1,207 @@
+/* ==========================
+   Dekan Casino — Slot Page
+   ========================== */
+
+/* RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: radial-gradient(circle at top, #09313a 0, #020610 55%, #000 100%);
+    color: #f7fafc;
+    overflow-x: hidden;
+    min-height: 100vh;
+    position: relative;
+}
+
+/* легка текстура сукна */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background-image:
+        linear-gradient(45deg, rgba(255,255,255,0.04) 1px, transparent 1px),
+        linear-gradient(-45deg, rgba(0,0,0,0.18) 1px, transparent 1px);
+    background-size: 36px 36px;
+    opacity: 0.55;
+    pointer-events: none;
+}
+
+/* затемнення по краях */
+body::after {
+    content: "";
+    position: fixed;
+    inset: -20%;
+    z-index: -1;
+    background:
+        radial-gradient(circle at 50% 120%, rgba(0,0,0,0.95), transparent 60%);
+    pointer-events: none;
+}
+
+/* ========= КОНТЕЙНЕР СЛОТА ========= */
+
+.casino-container {
+    width: min(960px, 100% - 32px);
+    margin: 0 auto;
+    padding: 80px 0 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+}
+
+/* заголовок */
+.casino-container h1 {
+    font-size: clamp(2rem, 3vw + 1rem, 2.8rem);
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    text-align: center;
+    text-shadow: 0 0 22px rgba(0,0,0,0.9);
+}
+
+/* поле з іменем */
+#user_name {
+    width: 260px;
+    padding: 10px 12px;
+    border-radius: 999px;
+    border: 1px solid rgba(148, 163, 184, 0.85);
+    background: rgba(15, 23, 42, 0.95);
+    color: #e5e7eb;
+    font-size: 14px;
+    outline: none;
+    text-align: center;
+    transition: border-color .16s, box-shadow .16s, background .16s;
+}
+
+#user_name::placeholder {
+    color: #6b7280;
+}
+
+#user_name:focus {
+    border-color: #facc15;
+    box-shadow: 0 0 0 1px rgba(250, 204, 21, 0.7);
+    background: rgba(15, 23, 42, 1);
+}
+
+/* ========= САМ СТОЛ / ПАНЕЛЬ ========= */
+
+.slot-grid {
+    margin-top: 8px;
+    display: grid;
+    grid-template-columns: repeat(3, 100px);
+    grid-auto-rows: 100px;
+    gap: 12px;
+    padding: 18px;
+    border-radius: 24px;
+    background:
+        radial-gradient(circle at top, rgba(251, 191, 36, 0.16), transparent 60%),
+        rgba(15, 23, 42, 0.96);
+    border: 1px solid rgba(148, 163, 184, 0.9);
+    box-shadow:
+        0 24px 60px rgba(0,0,0,1),
+        0 0 0 1px rgba(15,23,42,1);
+    position: relative;
+    overflow: hidden;
+}
+
+/* легке “світіння” по краях */
+.slot-grid::before {
+    content: "";
+    position: absolute;
+    inset: -30%;
+    background:
+        radial-gradient(circle at 0 0, rgba(250,204,21,0.22), transparent 55%),
+        radial-gradient(circle at 100% 100%, rgba(56,189,248,0.20), transparent 55%);
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+/* картинка-символ */
+.slot-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background: radial-gradient(circle at center, rgba(15,23,42,0.9), rgba(0,0,0,1));
+    border-radius: 18px;
+    border: 1px solid rgba(30,64,79,0.9);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.9);
+    padding: 6px;
+    transition: transform 0.16s ease-out, box-shadow 0.16s ease-out, border-color 0.16s;
+}
+
+/* невеликий bounce при оновленні (JS може додавати клас .slot-img--active при виграші) */
+.slot-img--active {
+    transform: translateY(-4px) scale(1.04);
+    border-color: rgba(250, 204, 21, 0.95);
+    box-shadow: 0 18px 40px rgba(0,0,0,1);
+}
+
+/* ========= КНОПКА "КРУТИТИ" ========= */
+
+#spinBtn {
+    margin-top: 18px;
+    min-width: 220px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    padding: 12px 26px;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    cursor: pointer;
+    border: none;
+    background: radial-gradient(circle at 20% 0%, #facc15, #f97316);
+    color: #0b1120;
+    box-shadow: 0 12px 28px rgba(0,0,0,0.9);
+    transition: transform 0.12s ease-out, box-shadow 0.12s ease-out, filter 0.12s;
+}
+
+#spinBtn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 20px 48px rgba(0,0,0,1);
+    filter: brightness(1.05);
+}
+
+#spinBtn:active {
+    transform: translateY(1px) scale(0.98);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.9);
+}
+
+/* ========= РЕЗУЛЬТАТ ========= */
+
+#outcome {
+    margin-top: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-align: center;
+    color: #facc15;
+    text-shadow: 0 0 14px rgba(0,0,0,1);
+}
+
+/* ========= АДАПТИВ ========= */
+
+@media (max-width: 600px) {
+    .casino-container {
+        padding-top: 70px;
+    }
+
+    .slot-grid {
+        grid-template-columns: repeat(3, 80px);
+        grid-auto-rows: 80px;
+        padding: 14px;
+    }
+}

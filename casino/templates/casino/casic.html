@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <title>Псевдо Казино 🎰</title>
+    <link rel="stylesheet" href="{% static 'casino/css/styles_casic.css' %}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<div class="casino-container">
+    <h1>🎰 Fav ZUNU</h1>
+    <input type="text" id="user_name" placeholder="Введіть ваше ім'я">
+
+    <div class="slot-grid">
+        {% for i in "123456789" %}
+        <img id="slot{{i}}" src="{% static 'casino/img/spintal.png' %}" class="slot-img">
+        {% endfor %}
+    </div>
+
+    <button id="spinBtn">Крутити слот!</button>
+    <p id="outcome"></p>
+</div>
+
+<script>
+const images = {
+    "spintal": "{% static 'casino/img/spintal.png' %}",
+    "barranic": "{% static 'casino/img/barranic.png' %}",
+    "vozniak": "{% static 'casino/img/vozniak.png' %}",
+    "dekan": "{% static 'casino/img/dekan.png' %}",
+    "kyrator": "{% static 'casino/img/kyrator.png' %}"
+};
+
+function getRandomSymbol() {
+    const keys = Object.keys(images);
+    return keys[Math.floor(Math.random() * keys.length)];
+}
+
+function spinAnimation(callback) {
+    const slots = 9;
+    let spins = 0;
+
+    const interval = setInterval(() => {
+        for(let i=1; i<=slots; i++){
+            $('#slot'+i).attr('src', images[getRandomSymbol()]);
+        }
+        spins++;
+        if(spins >= 20) { // кількість швидких “крутінь”
+            clearInterval(interval);
+            callback();
+        }
+    }, 100); // швидкість кручення
+}
+
+$('#spinBtn').click(function(){
+    let user_name = $('#user_name').val() || "Гравець";
+
+    spinAnimation(() => {
+        $.ajax({
+            type: "POST",
+            url: "{% url 'spin' %}",
+            data: {
+                'user_name': user_name,
+                'csrfmiddlewaretoken': '{{ csrf_token }}'
+            },
+            success: function(data){
+                // заповнюємо 3x3 відповідно до отриманих результатів
+                const slot_values = data.slot; // очікуємо 9 елементів
+                for(let i=1;i<=9;i++){
+                    $('#slot'+i).attr('src', images[slot_values[i-1]]);
+                }
+                $('#outcome').text(data.outcome);
+            }
+        });
+    });
+});
+</script>
+</body>
+</html>
